@@ -1,42 +1,30 @@
 {% extends "layouts/base.html" %}
-{% set project = "Login" %}
+{% set project = "Sign In" %}
 
 {% block body %}
-    <!-- Start of body content specific to page -->
-    <div class="px-5 py-5 mx-auto">
-        <div class="container py-4">
-            <header class="pb-3 mb-4 border-bottom border-primary text-light">
-                <span class="fs-4">Login Page</span>
-            </header>
-        </div>
-    
-        <div class="container py-4 text-light bg-primary">
-    
-            <div class="container bg-secondary py-4">
-                <div class="p-5 mb-4 bg-light text-dark rounded-3">
-                    <form name="f" action="{{ url_for('login') }}" method="POST">
-                        <table>
-                            {% if error %}
-                                <tr class="alert alert-error">
-                                    Invalid username and password.
-                                </tr>
-                            {% endif %}
-                            {% if logout %}
-                                <tr class="alert alert-success">
-                                    You have been logged out.
-                                </tr>
-                            {% endif %}
-                            <tr><th><label for="username">User ID</label></th></tr>
-                            <tr><td><input id='username' name="username" size="20" required></td></tr>
-                            <tr><th><label for="password">Password</label></th></tr>
-                            <tr><td><input type="password" id="password" name="password" size="20" required></td></tr>
-                            <!-- Hidden input for 'next' page, which is set on unauthorized redirects -->
-                            <input type="hidden" name="next" value="{{ next }}">
-                            <tr><th><input type="submit" value="Submit"></th></tr>
-                        </table>
-                    </form>
-                </div>
+<div class="fa-card fa-login">
+    <h1 style="font-size:1.7rem">Admin Sign In</h1>
+    <p style="color:var(--ink-soft)">For site administrators. Community members sign in on the website.</p>
 
+    {% if error %}
+        <div class="fa-alert error" role="alert">That username and password did not match.</div>
+    {% endif %}
+    {% if logout %}
+        <div class="fa-alert ok" role="status">You have been signed out.</div>
+    {% endif %}
+
+    <form name="f" action="{{ url_for('login') }}" method="POST">
+        <div class="fa-field">
+            <label for="username">Username</label>
+            <input id="username" name="username" autocomplete="username" required>
         </div>
-    </div>
+        <div class="fa-field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+        <!-- Hidden input for 'next' page, which is set on unauthorized redirects -->
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="fa-btn" type="submit" style="width:100%">Sign In</button>
+    </form>
+</div>
 {% endblock %}

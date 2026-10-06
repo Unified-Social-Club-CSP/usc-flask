@@ -13,6 +13,10 @@ from __init__ import app, db, login_manager  # Key Flask objects
 from model.persona import Persona, initPersonas, initPersonaUsers
 # API endpoints
 from api.user import user_api 
+from api.fops_progress import fops_progress_api
+from model.fops_progress import initGameProgress
+from api.fops_bingo import fops_bingo_api
+from model.fops_bingo import initBingoRooms
 from api.python_exec_api import python_exec_api
 from api.javascript_exec_api import javascript_exec_api
 from api.section import section_api
@@ -76,6 +80,13 @@ app.register_blueprint(persona_api)
 app.register_blueprint(skill_passport_api)
 app.register_blueprint(pfp_api) 
 app.register_blueprint(groq_api)
+app.register_blueprint(fops_progress_api)
+app.register_blueprint(fops_bingo_api)
+
+# Friends of Poway Seniors: make sure our tables exist
+with app.app_context():
+    initGameProgress()
+    initBingoRooms()
 app.register_blueprint(gemini_api)
 app.register_blueprint(ainpc_api)
 app.register_blueprint(microblog_api)
@@ -180,8 +191,10 @@ def page_not_found(e):
 
 @app.route('/')  # connects default URL to index() function
 def index():
-    print("Home:", current_user)
-    return render_template("index.html")
+    stats = None
+    if current_user.is_authenticated:
+        stats = {'users': User.query.count(), 'sections': Section.query.count()}
+    return render_template("index.html", stats=stats)
 
 
 

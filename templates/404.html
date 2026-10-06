@@ -1,20 +1,10 @@
 {% extends "layouts/base.html" %}
-{% set project = "404" %}
+{% set project = "Page Not Found" %}
 
 {% block body %}
-    <div class="index">
-        <div class="center-block" style="margin: 2% 10% 10%; font-family: gilroy,serif;">
-            <div class="col-12" style="text-align: center;">
-                <h1><strong>Something Went Wrong, 404 Not Found</strong></h1>
-            </div>
-
-            <div class="jumbotron jumbotron-fluid" style="text-align: center; ">
-                <h2>Engineering is on the case!</h2>
-                <a href="/">Go Home</a>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block background %}
+<div class="fa-card fa-login" style="text-align:center">
+    <h1 style="font-size:1.8rem">Page not found</h1>
+    <p style="color:var(--ink-soft)">We could not find that page.</p>
+    <a class="fa-btn" href="/">Back to the dashboard</a>
+</div>
 {% endblock %}

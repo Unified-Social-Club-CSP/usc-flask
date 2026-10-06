@@ -1,0 +1,108 @@
+/* Friends of Poway Seniors: backend admin styles (matches fops-pages) */
+:root {
+  --cream: #fbf7f0;
+  --paper: #ffffff;
+  --sand: #f1e9dc;
+  --ink: #1d2a30;
+  --ink-soft: #46555c;
+  --teal: #1f5f5b;
+  --teal-dark: #164542;
+  --teal-tint: #e3efed;
+  --coral: #b4472f;
+  --gold: #e8b04b;
+  --line: #d9cfbf;
+  --radius: 18px;
+  --shadow: 0 2px 4px rgba(29, 42, 48, 0.06), 0 10px 28px rgba(29, 42, 48, 0.08);
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", Arial, sans-serif;
+  --font-head: "Fraunces", Georgia, serif;
+}
+
+html { font-size: 18px; }
+body {
+  margin: 0;
+  background: var(--cream) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-body) !important;
+  line-height: 1.55;
+}
+h1, h2, h3, h4, h5 { font-family: var(--font-head); color: var(--teal-dark); }
+a { color: var(--teal); }
+:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; }
+
+/* Header */
+.fa-header { background: var(--paper); border-bottom: 1px solid var(--line); }
+.fa-header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0.7rem 1.25rem;
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.fa-brand { display: flex; align-items: center; gap: 0.65rem; text-decoration: none; margin-right: auto; }
+.fa-mark {
+  display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+  background: var(--teal); color: var(--paper); font-family: var(--font-head); font-weight: 700;
+}
+.fa-brand-name { font-family: var(--font-head); font-weight: 700; color: var(--teal-dark); font-size: 1.05rem; line-height: 1.1; }
+.fa-brand-tag { display: block; color: var(--ink-soft); font-size: 0.75rem; font-family: var(--font-body); font-weight: 400; }
+.fa-nav { display: flex; gap: 0.25rem; flex-wrap: wrap; align-items: center; }
+.fa-nav a {
+  display: inline-flex; align-items: center; min-height: 2.6rem; padding: 0.3rem 0.85rem;
+  border-radius: 999px; color: var(--ink); font-weight: 700; text-decoration: none;
+}
+.fa-nav a:hover, .fa-nav a.active { background: var(--teal-tint); color: var(--teal-dark); }
+.fa-user { color: var(--ink-soft); font-size: 0.9rem; padding: 0 0.5rem; }
+
+/* Layout */
+.fa-main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+.fa-hero { margin-bottom: 1.75rem; }
+.fa-hero h1 { font-size: 2rem; margin-bottom: 0.3rem; }
+.fa-hero p { color: var(--ink-soft); margin: 0; }
+
+.fa-card {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 1.4rem; box-shadow: var(--shadow);
+}
+.fa-grid { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+.fa-stat .num { font-family: var(--font-head); font-size: 2.2rem; color: var(--teal-dark); line-height: 1; }
+.fa-stat .lbl { color: var(--ink-soft); font-weight: 700; margin-top: 0.35rem; }
+.fa-section-title { margin: 2rem 0 0.9rem; font-size: 1.35rem; }
+
+.fa-link-card { display: block; text-decoration: none; color: var(--ink); transition: border-color 0.15s; }
+.fa-link-card:hover { border-color: var(--teal); color: var(--ink); }
+.fa-link-card h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+.fa-link-card p { color: var(--ink-soft); margin: 0; font-size: 0.92rem; }
+
+.fa-endpoints { width: 100%; border-collapse: collapse; }
+.fa-endpoints th, .fa-endpoints td { text-align: left; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--line); }
+.fa-endpoints code { background: var(--sand); padding: 0.1rem 0.4rem; border-radius: 6px; color: var(--ink); }
+
+.fa-pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.75rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; }
+.fa-pill.ok { background: var(--teal-tint); color: var(--teal-dark); }
+.fa-pill.ok::before { content: ""; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--teal); }
+
+/* Buttons and forms */
+.fa-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 3rem;
+  padding: 0.5rem 1.3rem; border-radius: 999px; border: 2px solid transparent;
+  background: var(--teal); color: var(--paper) !important; font: 700 1rem var(--font-body);
+  text-decoration: none; cursor: pointer;
+}
+.fa-btn:hover { background: var(--teal-dark); }
+.fa-btn.outline { background: var(--paper); color: var(--teal-dark) !important; border-color: var(--teal); }
+.fa-login { max-width: 28rem; margin: 2rem auto; }
+.fa-field { margin-bottom: 1rem; }
+.fa-field label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
+.fa-field input {
+  width: 100%; min-height: 3rem; padding: 0.5rem 0.8rem; font: 1rem var(--font-body);
+  border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink);
+}
+.fa-field input:focus { border-color: var(--teal); outline: 4px solid var(--gold); }
+.fa-alert { padding: 0.75rem 1rem; border-radius: 12px; margin-bottom: 1rem; font-weight: 700; }
+.fa-alert.error { background: #f7e1da; color: #923823; }
+.fa-alert.ok { background: var(--teal-tint); color: var(--teal-dark); }
+
+/* Make existing Bootstrap data pages match */
+.table { color: var(--ink) !important; background: var(--paper); }
+.table thead th { background: var(--teal) !important; color: var(--paper) !important; border-color: var(--teal) !important; }
+.text-white, .text-light { color: var(--ink) !important; }
+.bg-primary, .bg-secondary, .bg-dark { background-color: var(--paper) !important; }
+.btn-primary { background: var(--teal) !important; border-color: var(--teal) !important; }
+.card { border-radius: var(--radius) !important; border-color: var(--line) !important; }

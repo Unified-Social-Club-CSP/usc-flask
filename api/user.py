@@ -174,12 +174,12 @@ class UserAPI:
             uid = body.get('uid')
             if uid is None or len(uid) < 2:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 400
-          
-            # check if uid is a GitHub account
-            _, status = GitHubUser().get(uid)
-            if status != 200:
-                return {'message': f'User ID {uid} not a valid GitHub account' }, 404
-            
+
+            # Friends of Poway Seniors users are community members, not GitHub users,
+            # so any unused username is accepted.
+            if User.query.filter_by(_uid=uid).first():
+                return {'message': f'The username {uid} is already taken. Please choose another.'}, 409
+
             ''' User object creation '''
             #1: Setup minimal User object using __init__ method
             password = body.get('password')

@@ -40,6 +40,7 @@ allowed_origins = [
     'http://localhost:4000',
     'http://127.0.0.1:4000',
     'https://open-coding-society.github.io',
+    'https://rex0dex.github.io',  # fops-pages frontend
     # Regex pattern to match any subdomain of opencodingsociety.com
     r'https://.*\.opencodingsociety\.com',
     'https://opencodingsociety.com',
