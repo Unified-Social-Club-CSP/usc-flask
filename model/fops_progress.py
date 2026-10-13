@@ -10,7 +10,7 @@ from datetime import datetime
 from __init__ import db
 
 # Games the website is allowed to save. Anything else is rejected.
-FOPS_GAMES = ('scam-trainer', 'bingo', 'movement')
+FOPS_GAMES = ('scam-trainer', 'bingo', 'movement', 'geography')
 MAX_DATA_BYTES = 20_000
 
 
