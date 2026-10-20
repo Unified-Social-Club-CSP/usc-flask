@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from __init__ import app, db
 from api.authorize import token_required
 from model.user import User
+from model import account_types
+from model.google_token import verified_google_email
 from model.github import GitHubUser
 import os
 
@@ -181,14 +183,22 @@ class UserAPI:
                 return {'message': f'The username {uid} is already taken. Please choose another.'}, 409
 
             ''' User object creation '''
+            # The account type (see model/account_types.json) sets the role. A type with Google
+            # domains is activated only when Google verifies an email in them for the submitted
+            # token; any other type stays inactive until a Teacher/Admin verifies it.
+            account_type = account_types.get(body.get('accountType'))
+            role = account_type['role']
+            domains = account_type['google_verified_domains']
+            verified_email = verified_google_email(body.get('idToken'), domains) if domains else None
+
             #1: Setup minimal User object using __init__ method
             password = body.get('password')
             if password is not None:
                 if len(password) < 8 and not password.startswith("pbkdf2:sha256:"):
                     return {'message': 'Password must be at least 8 characters'}, 400
-                user_obj = User(name=name, uid=uid, password=password)
+                user_obj = User(name=name, uid=uid, password=password, role=role)
             else:
-                user_obj = User(name=name, uid=uid)
+                user_obj = User(name=name, uid=uid, role=role)
             
             # Handle additional fields that frontend sends
             # Create a cleaned body with only the fields User model expects
@@ -232,6 +242,9 @@ class UserAPI:
                         return jsonify(_without_password(db_user.read()))  # Return the user anyway
                     else:
                         return {'message': f'Processed {name}, either a format error or User ID {uid} is duplicate'}, 400
+
+                if verified_email:
+                    user.activate()
 
                 #print(f"Successfully created user: {user.uid}")
                 # return response, the created user details as a JSON object
@@ -364,7 +377,11 @@ class UserAPI:
             # bad request
             if user is None:
                 return {'message': f'User {uid} not found'}, 404
-           
+
+            blocker = user.deletion_blocker(g.current_user)
+            if blocker:
+                return {'message': blocker[1]}, blocker[0]
+
             # Read and then Delete the User object using custom methods
             user_json = _without_password(user.read())
             user.delete()
@@ -847,6 +864,51 @@ class UserAPI:
                 return {'message': f'Failed to reset password for {uid}'}, 500
             return {'message': f'Password reset for {uid}'}, 200
 
+    class _VerifyAccount(Resource):
+        """Teacher/Admin verifies an account: marks it active and records last_verified.
+        Accounts verified through Google OAuth (see model/account_types.json) are not
+        verified here."""
+        @token_required(["Teacher", "Admin"])
+        def post(self, uid):
+            target = User.query.filter_by(_uid=uid).first()
+            if target is None:
+                return {'message': f'User {uid} not found'}, 404
+            if target.role in account_types.oauth_roles():
+                return {'message': 'This account is verified through Google sign-in, not by a Teacher or Admin'}, 400
+            return jsonify(_without_password(target.activate().read()))
+
+    class _DeactivateAccount(Resource):
+        """Teacher/Admin marks an account inactive. The account and its data are kept."""
+        @token_required(["Teacher", "Admin"])
+        def post(self, uid):
+            target = User.query.filter_by(_uid=uid).first()
+            if target is None:
+                return {'message': f'User {uid} not found'}, 404
+            blocker = target.deactivation_blocker(g.current_user)
+            if blocker:
+                return {'message': blocker[1]}, blocker[0]
+            return jsonify(_without_password(target.deactivate().read()))
+
+    class _AdminCreate(Resource):
+        """Teacher/Admin creates an account of a staff-created type (see
+        model/account_types.json). The account starts inactive and follows the same
+        verification step as a self-created one."""
+        @token_required(["Teacher", "Admin"])
+        def post(self):
+            body = request.get_json(silent=True) or {}
+            allowed = account_types.staff_created()
+            role = allowed.get((body.get('accountType') or '').lower())
+            name, uid, password = body.get('name'), body.get('uid'), body.get('password')
+            if role is None:
+                return {'message': f"accountType must be one of: {', '.join(allowed)}"}, 400
+            if not name or not uid or not password or len(password) < 8:
+                return {'message': 'name, uid and a password of at least 8 characters are required'}, 400
+            user = User(name=name, uid=uid, password=password, role=role).create(
+                {'email': body['email']} if body.get('email') else None)
+            if not user:
+                return {'message': f'User ID {uid} is a duplicate or invalid'}, 400
+            return jsonify(_without_password(user.read()))
+
     # building RESTapi endpoint
     api.add_resource(_ID, '/id')
     api.add_resource(_BULK, '/users')
@@ -858,6 +920,9 @@ class UserAPI:
     api.add_resource(_APExam, '/apexam')
     api.add_resource(_School, '/school')
     api.add_resource(_ResetPasswordVerified, '/reset-password')
+    api.add_resource(_VerifyAccount, '/user/<string:uid>/verify')
+    api.add_resource(_DeactivateAccount, '/user/<string:uid>/deactivate')
+    api.add_resource(_AdminCreate, '/user/admin-create')
     
     class _Class(Resource):
         """Manage the user's `class` list (e.g. CSSE, CSP, CSA).

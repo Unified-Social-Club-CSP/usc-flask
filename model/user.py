@@ -1,13 +1,14 @@
 """ database dependencies to support sqliteDB examples """
 from flask import current_app
 from flask_login import UserMixin
-from datetime import date
+from datetime import date, datetime, timedelta
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import json
 
 from __init__ import app, db
+from model import account_types
 from model.github import GitHubUser
 from model.kasm import KasmUser
 
@@ -163,6 +164,15 @@ class User(db.Model, UserMixin):
     # a stolen JWT or session cookie stops working the moment this account's password is
     # reset, instead of staying valid for the rest of its lifetime.
     token_version = db.Column(db.Integer, default=0, nullable=False)
+    # Account lifecycle. New accounts are inactive until explicitly verified.
+    # An existing database needs this once, BEFORE this code is deployed (db.create_all()
+    # does not add columns to an existing table). The UPDATE keeps every existing account
+    # active, and due for re-verification in January:
+    #   ALTER TABLE users ADD COLUMN active BOOLEAN NOT NULL DEFAULT 0;
+    #   ALTER TABLE users ADD COLUMN last_verified DATETIME NULL;
+    #   UPDATE users SET active = 1, last_verified = '2026-01-30 00:00:00';
+    active = db.Column(db.Boolean, default=False, nullable=False)
+    last_verified = db.Column(db.DateTime, nullable=True)
 
     # Define many-to-many relationship with Section model through UserSection table
     # Overlaps setting silences SQLAlchemy warnings about multiple relationship paths
@@ -314,7 +324,61 @@ class User(db.Model, UserMixin):
 
     def is_teacher(self):
         return self._role == "Teacher"
+
+    @property
+    def verification_state(self):
+        if not self.active:
+            return "inactive"
+        if self.last_verified is None or datetime.utcnow() - self.last_verified >= timedelta(days=account_types.verification_interval_days()):
+            return "active_verification_required"
+        return "active_verified"
+
+    def activate(self):
+        """Verify the account: mark it active and record when."""
+        self.active = True
+        self.last_verified = datetime.utcnow()
+        db.session.commit()
+        return self
     
+    def deactivate(self):
+        """Mark the account inactive. The account, its data and last_verified are kept."""
+        self.active = False
+        db.session.commit()
+        return self
+
+    def is_last_active_essential(self):
+        """True when this is the only active account of a role the system must keep."""
+        return (self.active and self.role in account_types.essential_roles()
+                and User.query.filter_by(_role=self.role, active=True).count() == 1)
+
+    def deactivation_blocker(self, actor):
+        """None if actor may deactivate this account, else (HTTP status, reason)."""
+        if self.is_admin() and not actor.is_admin():
+            return 403, "Only an Admin can deactivate an Admin"
+        if self.is_last_active_essential():
+            return 409, f"At least one active {self.role} account must remain"
+        return None
+
+    def deletion_blocker(self, actor):
+        """None if actor may delete this account, else (HTTP status, reason)."""
+        if not (actor.is_admin() and actor.active):
+            return 403, "Only an active Admin can delete accounts"
+        if self.id == actor.id:
+            return 403, "You cannot delete your own account; another Admin must do it"
+        if self.is_last_active_essential():
+            return 409, f"At least one active {self.role} account must remain"
+        return None
+
+    @property
+    def staff_verifies(self):
+        """True when a Teacher/Admin verifies this account, False when Google sign-in does."""
+        return self.role not in account_types.oauth_roles()
+
+    @property
+    def verification_due(self):
+        """True while the account is inactive or its verification has lapsed."""
+        return self.verification_state != "active_verified"
+
     # getter method for profile picture
     @property
     def pfp(self):
@@ -480,6 +544,9 @@ class User(db.Model, UserMixin):
             "password": self._password,  # Only for internal use, not for API
             "school": self.school,
             "game_profile": self.game_profile,
+            "active": self.active,
+            "last_verified": self.last_verified.isoformat() if self.last_verified else None,
+            "verification_state": self.verification_state,
         }
         sections = self.read_sections()
         data.update(sections)
@@ -793,6 +860,8 @@ def initUsers():
         users = [u1, u2, u3, u4]
         
         for user in users:
+            user.active = True
+            user.last_verified = datetime.utcnow()
             try:
                 user.create()
             except IntegrityError:

@@ -7,7 +7,7 @@
     <p style="color:var(--ink-soft)">For site administrators. Community members sign in on the website.</p>
 
     {% if error %}
-        <div class="fa-alert error" role="alert">That username and password did not match.</div>
+        <div class="fa-alert error" role="alert">{{ error }}</div>
     {% endif %}
     {% if logout %}
         <div class="fa-alert ok" role="status">You have been signed out.</div>
