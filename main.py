@@ -18,6 +18,8 @@ from api.fops_progress import fops_progress_api
 from model.fops_progress import initGameProgress
 from api.fops_bingo import fops_bingo_api
 from model.fops_bingo import initBingoRooms
+from api.fops_interests import fops_interests_api
+from model.fops_interests import initInterestSurveys
 from api.python_exec_api import python_exec_api
 from api.javascript_exec_api import javascript_exec_api
 from api.section import section_api
@@ -85,11 +87,13 @@ app.register_blueprint(pfp_api)
 app.register_blueprint(groq_api)
 app.register_blueprint(fops_progress_api)
 app.register_blueprint(fops_bingo_api)
+app.register_blueprint(fops_interests_api)
 
 # Friends of Poway Seniors: make sure our tables exist
 with app.app_context():
     initGameProgress()
     initBingoRooms()
+    initInterestSurveys()
 app.register_blueprint(gemini_api)
 app.register_blueprint(ainpc_api)
 app.register_blueprint(microblog_api)
