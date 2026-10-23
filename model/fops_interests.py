@@ -6,7 +6,10 @@ show first) and, added up across members, help volunteers plan events.
 import json
 from datetime import datetime
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from __init__ import db
+from model.user import User
 
 # Every question the survey can ask, and the answers it accepts.
 # "many" questions take a list of answers; the others take one.
@@ -18,6 +21,29 @@ QUESTIONS = {
     'reminders': {'many': False, 'options': ['email', 'phone', 'none']},
     'volunteer': {'many': False, 'options': ['yes', 'maybe', 'no']},
 }
+
+# Plain-word text for the results page, matching the wording on the profile page.
+LABELS = {
+    'goals': ('What would you like to do here?', {
+        'games': 'Play games', 'scams': 'Stay safe from scams', 'exercise': 'Exercise',
+        'events': 'Come to events', 'tech-help': 'Get tech help'}),
+    'comfort': ('How comfortable are you with phones and computers?', {
+        'starting': 'Just starting', 'okay': 'Okay', 'comfortable': 'Very comfortable'}),
+    'scam_contact': ('Have you gotten a scam message or call this year?', {
+        'yes': 'Yes', 'not-sure': 'Not sure', 'no': 'No'}),
+    'events': ('Which events interest you?', {
+        'bingo': 'Bingo', 'tech-help': 'Tech help', 'lunches': 'Lunches',
+        'exercise': 'Exercise classes', 'trips': 'Trips'}),
+    'reminders': ('How do you prefer to be reminded?', {
+        'email': 'Email', 'phone': 'Phone call', 'none': 'No reminders'}),
+    'volunteer': ('Would you like to volunteer?', {
+        'yes': 'Yes', 'maybe': 'Maybe later', 'no': 'No'}),
+}
+
+# Who may see survey results. Totals have no names; individual answers do.
+# Answering "yes" to the volunteer question never changes anyone's role.
+SUMMARY_ROLES = ['Admin', 'Volunteer']
+RESPONSE_ROLES = ['Admin']
 
 
 def clean_answers(raw):
@@ -75,7 +101,11 @@ class InterestSurvey(db.Model):
             db.session.add(row)
         else:
             row._answers = json.dumps(answers)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()
+            raise
         return row
 
     @staticmethod
@@ -91,6 +121,16 @@ class InterestSurvey(db.Model):
                     if option in counts[key]:
                         counts[key][option] += 1
         return {'responses': len(rows), 'counts': counts}
+
+    @staticmethod
+    def responses():
+        """Every member's answers with their name, newest first. Admin only."""
+        rows = (db.session.query(InterestSurvey, User)
+                .join(User, User.id == InterestSurvey._user_id)
+                .order_by(InterestSurvey._updated_at.desc())
+                .all())
+        return [{'name': user.name, 'uid': user.uid, 'active': user.active, **row.read()}
+                for row, user in rows]
 
 
 def initInterestSurveys():

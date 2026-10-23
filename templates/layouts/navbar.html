@@ -12,6 +12,9 @@
                 <a href="{{ url_for('u2table') }}" class="{{ 'active' if request.endpoint == 'u2table' }}">Users</a>
                 <a href="{{ url_for('sections') }}" class="{{ 'active' if request.endpoint == 'sections' }}">Sections</a>
                 <a href="{{ url_for('persona') }}" class="{{ 'active' if request.endpoint == 'persona' }}">Personas</a>
+                {% if current_user.active and current_user.role in ['Admin', 'Volunteer'] %}
+                <a href="{{ url_for('fops_interests') }}" class="{{ 'active' if request.endpoint == 'fops_interests' }}">Interests</a>
+                {% endif %}
             {% endif %}
             <a href="{{ frontend }}">Website</a>
             {% if current_user.is_authenticated %}

@@ -557,7 +557,8 @@ class UserAPI:
                                 "data": None
                             }, 500
                  
-        @token_required()
+        # A new account waiting for verification must still be able to sign out.
+        @token_required(allow_pending=True)
         def delete(self):
             ''' Invalidate the current user's token by setting its expiry to 0 '''
             current_user = g.current_user

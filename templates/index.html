@@ -45,6 +45,12 @@
         <h3>Personas</h3>
         <p>Profile types used to group users.</p>
     </a>
+    {% if current_user.active and current_user.role in ['Admin', 'Volunteer'] %}
+    <a class="fa-card fa-link-card" href="{{ url_for('fops_interests') }}">
+        <h3>Interest Survey</h3>
+        <p>What members told us on their profile, for planning events.</p>
+    </a>
+    {% endif %}
 </div>
 {% endif %}
 
@@ -56,15 +62,16 @@
         <tbody>
             <tr><td><code>POST /api/user</code></td><td>Create an account</td></tr>
             <tr><td><code>POST /api/authenticate</code></td><td>Sign in</td></tr>
-            <tr><td><code>DELETE /api/authenticate</code></td><td>Sign out</td></tr>
+            <tr><td><code>DELETE /api/authenticate</code></td><td>Sign out (also for new accounts waiting for approval)</td></tr>
             <tr><td><code>GET /api/id</code></td><td>Who is signed in</td></tr>
             <tr><td><code>GET / PUT /api/fops/progress/&lt;game&gt;</code></td><td>Saved progress for Spot the Scam, Bingo, and Movement Games</td></tr>
             <tr><td><code>POST /api/fops/bingo/rooms</code></td><td>Start a Bingo game with friends</td></tr>
             <tr><td><code>POST /api/fops/bingo/rooms/&lt;code&gt;/join</code></td><td>Join a Bingo game by its number</td></tr>
             <tr><td><code>POST /api/fops/bingo/rooms/&lt;code&gt;/start</code></td><td>Host starts the shared caller</td></tr>
             <tr><td><code>POST /api/fops/bingo/rooms/&lt;code&gt;/claim</code></td><td>Claim BINGO (checked by the server)</td></tr>
-            <tr><td><code>GET / PUT /api/fops/profile/interests</code></td><td>A member's interest survey on their profile</td></tr>
-            <tr><td><code>GET /api/fops/profile/interests/summary</code></td><td>Survey totals for planning events (Admin only, no names)</td></tr>
+            <tr><td><code>GET /api/fops/profile/me</code></td><td>Who is signed in, including new accounts waiting for approval</td></tr>
+            <tr><td><code>GET / PUT /api/fops/profile/interests</code></td><td>A member's interest survey on their profile (works right after signup)</td></tr>
+            <tr><td><code>GET /api/fops/profile/interests/summary</code></td><td>Survey totals for planning events (Admin or Volunteer, no names)</td></tr>
         </tbody>
     </table>
 </div>

@@ -19,7 +19,7 @@ from model.fops_progress import initGameProgress
 from api.fops_bingo import fops_bingo_api
 from model.fops_bingo import initBingoRooms
 from api.fops_interests import fops_interests_api
-from model.fops_interests import initInterestSurveys
+from model.fops_interests import InterestSurvey, LABELS, SUMMARY_ROLES, RESPONSE_ROLES, initInterestSurveys
 from api.python_exec_api import python_exec_api
 from api.javascript_exec_api import javascript_exec_api
 from api.section import section_api
@@ -226,6 +226,16 @@ def sections():
 def persona():
     personas = Persona.query.all()
     return render_template("persona.html", personas=personas)
+
+@app.route('/fops/interests/')
+@login_required
+def fops_interests():
+    # Totals for active Admins and Volunteers; named answers for active Admins only.
+    if not current_user.active or current_user.role not in SUMMARY_ROLES:
+        abort(403)
+    responses = InterestSurvey.responses() if current_user.role in RESPONSE_ROLES else None
+    return render_template("fops_interests.html", summary=InterestSurvey.summary(),
+                           labels=LABELS, responses=responses)
 
 # Helper function to extract uploads for a user (ie PFP image)
 @app.route('/uploads/<path:filename>')

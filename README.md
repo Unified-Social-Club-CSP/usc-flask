@@ -1,5 +1,34 @@
 # README
 
+## FOPS interest quiz
+
+The frontend signs in through `/api/authenticate`, then opens its Profile page.
+`GET /api/fops/profile/me` returns the signed-in member's minimal identity and
+approval status. `GET` and `PUT /api/fops/profile/interests` read and save that
+member's answers, including while their account awaits approval. PUT accepts only
+`{"answers": {...}}`; questions may be skipped or all answers cleared with `{}`.
+The server chooses the owner from authentication, never a submitted user ID.
+Sign-out (`DELETE /api/authenticate`) also works while awaiting approval, so a
+new member can clear their own cookie. Other APIs continue to require active
+accounts, and quiz answers never grant roles.
+
+Open `/login` on this backend, sign in as an active Admin, then choose **Interests**
+(`/fops/interests/`) to view individual responses and anonymous totals. An active
+Volunteer sees totals only. The existing User role represents a community member;
+staff assign roles separately from quiz answers. Reminder answers record a
+preference and do not send messages.
+
+Run `python scripts/verify_interests.py` from an environment with the project
+requirements installed. It uses a disposable SQLite database and verifies that
+the local database stays unchanged. No new migration is required for this feature;
+the existing survey table is created at startup when absent. Older databases must
+still have upstream's `active` and `last_verified` user columns before use.
+
+For the local frontend, run this service on port 8587 and fops-pages on port 4500,
+using the same hostname. GitHub Pages cannot execute Flask: deploy this service
+separately, then set the frontend's `fops_backend_url` to its HTTPS origin and
+configure production cookies and allowed frontend origins before enabling live use.
+
 > This is a project to support AP Computer Science Principles (APCSP) as well as a UC articulated Data Structures course. It was crafted iteratively starting in 2020 to the present time.  The primary purposes are ...
 
 - Used as starter code for student projects for `AP CSP 1 and 2` and `Data Structures 1` curriculum.
