@@ -1,78 +1,76 @@
 {% extends "layouts/base.html" %}
-{% set project = "Dashboard" %}
+{% set project = "Home" %}
 
 {% block body %}
-<section class="fa-hero">
-    <h1>Backend Dashboard</h1>
-    <p>The server behind the Friends of Poway Seniors website. It handles accounts, sign-in, and saved progress.</p>
-</section>
-
-<div class="fa-grid">
-    <div class="fa-card fa-stat">
-        <span class="fa-pill ok">Server running</span>
-        <div class="lbl" style="margin-top:0.75rem">Port {{ config['FLASK_PORT'] }}</div>
+    <!-- Start of body content specific to page -->
+    <div class="px-5 py-5 mx-auto">
+        <h1 class="text-white"><strong>Friends of Poway Seniors Backend</strong></h1>
+        <p class="text-light">The Flask server behind the Friends of Poway Seniors website: accounts, sign-in, saved progress, Bingo rooms, and the interest survey.</p>
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <img class="card-img-top" src="{{ url_for('static', filename='assets/python.jpeg') }}" alt="Accounts" height="250">
+                    <div class="card-body">
+                    <h5 class="card-title">What does the <mark>backend</mark> do?</h5>
+                    <p class="card-text">
+                        <ol>
+                            <li>Stores member accounts with hashed passwords and signs people in with a secure cookie.</li>
+                            <li>New accounts stay inactive until an admin verifies them (OCS account verification).</li>
+                            <li>Saves each game's progress to the member's account, so seniors can practice on any computer.</li>
+                        </ol>
+                    </p>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('u2table') }}" class="btn btn-primary">Users ({{ stats.users }})</a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">Admin Login</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <img class="card-img-top" src="{{ url_for('static', filename='assets/flask.png') }}" alt="Flask APIs" height="250">
+                    <div class="card-body">
+                    <h5 class="card-title">Which <mark>APIs</mark> does the website call?</h5>
+                    <p class="card-text">
+                        <table class="table table-sm">
+                            <tr><td><code>POST /api/authenticate</code></td><td>Sign in</td></tr>
+                            <tr><td><code>GET /api/id</code></td><td>Who is signed in</td></tr>
+                            <tr><td><code>GET/PUT /api/fops/progress/&lt;game&gt;</code></td><td>Saved game progress</td></tr>
+                            <tr><td><code>POST /api/fops/bingo/rooms</code></td><td>Start, join, and claim Bingo</td></tr>
+                            <tr><td><code>GET /api/fops/profile/me</code></td><td>Who is signed in, even while waiting for approval</td></tr>
+                            <tr><td><code>GET/PUT /api/fops/profile/interests</code></td><td>Interest survey (works right after signup)</td></tr>
+                            <tr><td><code>GET /api/fops/profile/interests/summary</code></td><td>Survey totals (Admin or Volunteer)</td></tr>
+                        </table>
+                    </p>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('sections') }}" class="btn btn-primary">Sections ({{ stats.sections }})</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <img class="card-img-top" src="{{ url_for('static', filename='assets/pythondb.png') }}" alt="Database" height="250">
+                    <div class="card-body">
+                    <h5 class="card-title">What <mark>data</mark> do we keep?</h5>
+                    <p class="card-text">
+                        <ol>
+                            <li>Users, sections, and personas from the OCS Flask template.</li>
+                            <li>Game progress (Spot the Scam, Bingo, Movement Games) as JSON per member.</li>
+                            <li>Interest survey answers, summed without names to help volunteers plan events.</li>
+                            <li>Planned next: events, RSVPs, and scam reports.</li>
+                        </ol>
+                    </p>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('persona') }}" class="btn btn-primary">Personas</a>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.active and current_user.role in ['Admin', 'Volunteer'] %}
+                    <a href="{{ url_for('fops_interests') }}" class="btn btn-primary">Interest Survey</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {% if current_user.is_authenticated %}
-    <div class="fa-card fa-stat">
-        <div class="num">{{ stats.users }}</div>
-        <div class="lbl">Accounts</div>
-    </div>
-    <div class="fa-card fa-stat">
-        <div class="num">{{ stats.sections }}</div>
-        <div class="lbl">Sections</div>
-    </div>
-    {% else %}
-    <div class="fa-card">
-        <h3 style="font-size:1.1rem">Admins</h3>
-        <p style="margin-bottom:0.75rem; color:var(--ink-soft)">Sign in to see accounts and site data.</p>
-        <a class="fa-btn" href="{{ url_for('login') }}">Sign In</a>
-    </div>
-    {% endif %}
-</div>
-
-{% if current_user.is_authenticated %}
-<h2 class="fa-section-title">Manage</h2>
-<div class="fa-grid">
-    <a class="fa-card fa-link-card" href="{{ url_for('u2table') }}">
-        <h3>Users</h3>
-        <p>View and manage every account on the site.</p>
-    </a>
-    <a class="fa-card fa-link-card" href="{{ url_for('sections') }}">
-        <h3>Sections</h3>
-        <p>Groups that accounts belong to.</p>
-    </a>
-    <a class="fa-card fa-link-card" href="{{ url_for('persona') }}">
-        <h3>Personas</h3>
-        <p>Profile types used to group users.</p>
-    </a>
-    {% if current_user.active and current_user.role in ['Admin', 'Volunteer'] %}
-    <a class="fa-card fa-link-card" href="{{ url_for('fops_interests') }}">
-        <h3>Interest Survey</h3>
-        <p>What members told us on their profile, for planning events.</p>
-    </a>
-    {% endif %}
-</div>
-{% endif %}
-
-<h2 class="fa-section-title">Website Connections</h2>
-<div class="fa-card">
-    <p style="color:var(--ink-soft)">The website talks to these endpoints.</p>
-    <table class="fa-endpoints">
-        <thead><tr><th>Endpoint</th><th>Used for</th></tr></thead>
-        <tbody>
-            <tr><td><code>POST /api/user</code></td><td>Create an account</td></tr>
-            <tr><td><code>POST /api/authenticate</code></td><td>Sign in</td></tr>
-            <tr><td><code>DELETE /api/authenticate</code></td><td>Sign out (also for new accounts waiting for approval)</td></tr>
-            <tr><td><code>GET /api/id</code></td><td>Who is signed in</td></tr>
-            <tr><td><code>GET / PUT /api/fops/progress/&lt;game&gt;</code></td><td>Saved progress for Spot the Scam, Bingo, and Movement Games</td></tr>
-            <tr><td><code>POST /api/fops/bingo/rooms</code></td><td>Start a Bingo game with friends</td></tr>
-            <tr><td><code>POST /api/fops/bingo/rooms/&lt;code&gt;/join</code></td><td>Join a Bingo game by its number</td></tr>
-            <tr><td><code>POST /api/fops/bingo/rooms/&lt;code&gt;/start</code></td><td>Host starts the shared caller</td></tr>
-            <tr><td><code>POST /api/fops/bingo/rooms/&lt;code&gt;/claim</code></td><td>Claim BINGO (checked by the server)</td></tr>
-            <tr><td><code>GET /api/fops/profile/me</code></td><td>Who is signed in, including new accounts waiting for approval</td></tr>
-            <tr><td><code>GET / PUT /api/fops/profile/interests</code></td><td>A member's interest survey on their profile (works right after signup)</td></tr>
-            <tr><td><code>GET /api/fops/profile/interests/summary</code></td><td>Survey totals for planning events (Admin or Volunteer, no names)</td></tr>
-        </tbody>
-    </table>
-</div>
 {% endblock %}

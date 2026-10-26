@@ -2,68 +2,63 @@
 {% set project = "Interest Survey" %}
 
 {% block body %}
-<section class="fa-hero">
-    <h1>Interest Survey</h1>
-    <p>What members picked on their profile page. Use the totals to plan events.</p>
-</section>
+    <!-- Start of body content specific to page -->
+    <div class="px-5 py-5 mx-auto">
+        <h1 class="text-white"><strong>Interest Survey</strong></h1>
+        <p class="text-light">What members picked on their profile page. Use the totals to plan events. <mark>{{ summary.responses }}</mark> members answered.</p>
 
-<div class="fa-grid">
-    <div class="fa-card fa-stat">
-        <div class="num">{{ summary.responses }}</div>
-        <div class="lbl">Members answered</div>
-    </div>
-</div>
-
-<h2 class="fa-section-title">Totals</h2>
-<div class="fa-grid">
-    {% for key, (question, options) in labels.items() %}
-    <div class="fa-card">
-        <h3 style="font-size:1.05rem">{{ question }}</h3>
-        <table class="fa-endpoints">
-            <tbody>
-                {% for option, text in options.items() %}
-                <tr><td>{{ text }}</td><td style="text-align:right">{{ summary.counts[key][option] }}</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endfor %}
-</div>
-
-{% if responses is not none %}
-<h2 class="fa-section-title">Each Member's Answers</h2>
-<div class="fa-card" style="overflow-x:auto">
-    <p style="color:var(--ink-soft)">Admins only. Answering "yes" to volunteering does not change anyone's role.</p>
-    <table class="fa-endpoints">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Status</th>
-                {% for key, (question, options) in labels.items() %}<th>{{ question }}</th>{% endfor %}
-                <th>Updated</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for r in responses %}
-            <tr>
-                <td>{{ r.name }} <span style="color:var(--ink-soft)">({{ r.uid }})</span></td>
-                <td>{{ 'Active' if r.active else 'Waiting for approval' }}</td>
-                {% for key, (question, options) in labels.items() %}
-                {% set value = r.answers.get(key) %}
-                <td>
-                    {% if value is none %}&ndash;
-                    {% elif value is string %}{{ options.get(value, value) }}
-                    {% else %}{% for v in value %}{{ options.get(v, v) }}{{ ', ' if not loop.last }}{% endfor %}
-                    {% endif %}
-                </td>
-                {% endfor %}
-                <td>{{ r.updated_at[:10] if r.updated_at else '' }}</td>
-            </tr>
-            {% else %}
-            <tr><td colspan="{{ labels|length + 3 }}">No answers yet.</td></tr>
+        <div class="row">
+            {% for key, (question, options) in labels.items() %}
+            <div class="col-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ question }}</h5>
+                    <table class="table table-sm">
+                        {% for option, text in options.items() %}
+                        <tr><td>{{ text }}</td><td class="text-end">{{ summary.counts[key][option] }}</td></tr>
+                        {% endfor %}
+                    </table>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endif %}
+        </div>
+
+        {% if responses is not none %}
+        <h2 class="text-white"><strong>Each Member's Answers</strong></h2>
+        <p class="text-light">Admins only. Answering "yes" to volunteering does not change anyone's role.</p>
+        <div class="table-responsive">
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        {% for key, (question, options) in labels.items() %}<th>{{ question }}</th>{% endfor %}
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in responses %}
+                    <tr>
+                        <td>{{ r.name }} ({{ r.uid }})</td>
+                        <td>{{ 'Active' if r.active else 'Waiting for approval' }}</td>
+                        {% for key, (question, options) in labels.items() %}
+                        {% set value = r.answers.get(key) %}
+                        <td>
+                            {% if value is none %}&ndash;
+                            {% elif value is string %}{{ options.get(value, value) }}
+                            {% else %}{% for v in value %}{{ options.get(v, v) }}{{ ', ' if not loop.last }}{% endfor %}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                        <td>{{ r.updated_at[:10] if r.updated_at else '' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="{{ labels|length + 3 }}">No answers yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
 {% endblock %}
