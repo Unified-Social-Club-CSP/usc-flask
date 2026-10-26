@@ -1,20 +1,13 @@
 {% extends "layouts/base.html" %}
-{% set project = "404" %}
+{% set project = "Page Not Found" %}
 
 {% block body %}
-    <div class="index">
-        <div class="center-block" style="margin: 2% 10% 10%; font-family: gilroy,serif;">
-            <div class="col-12" style="text-align: center;">
-                <h1><strong>Something Went Wrong, 404 Not Found</strong></h1>
-            </div>
-
-            <div class="jumbotron jumbotron-fluid" style="text-align: center; ">
-                <h2>Engineering is on the case!</h2>
-                <a href="/">Go Home</a>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block background %}
+<div class="fa-wrap">
+    <section class="fa-hero" style="text-align:center">
+        <p class="fa-kicker">404</p>
+        <h1>We couldn't find <em>that page</em></h1>
+        <p style="margin:0 auto 1.5rem">The link may be old, or the page may have moved.</p>
+        <a class="fa-btn fa-btn-primary" href="{{ url_for('index') }}">Back to the backend home</a>
+    </section>
+</div>
 {% endblock %}

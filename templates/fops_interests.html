@@ -2,33 +2,41 @@
 {% set project = "Interest Survey" %}
 
 {% block body %}
-    <!-- Start of body content specific to page -->
-    <div class="px-5 py-5 mx-auto">
-        <h1 class="text-white"><strong>Interest Survey</strong></h1>
-        <p class="text-light">What members picked on their profile page. Use the totals to plan events. <mark>{{ summary.responses }}</mark> members answered.</p>
+<div class="fa-wrap">
+    <section class="fa-hero">
+        <p class="fa-kicker">Profile survey</p>
+        <h1>What members <em>told us</em></h1>
+        <p>Answers from the profile page. Use the totals to plan events.</p>
+    </section>
 
-        <div class="row">
+    <div class="fa-stats">
+        <div class="fa-stat"><div class="fa-stat-num">{{ summary.responses }}</div><div class="fa-stat-label">members answered</div></div>
+        <div class="fa-stat"><div class="fa-stat-num">{{ labels|length }}</div><div class="fa-stat-label">questions</div></div>
+        <div class="fa-stat"><div class="fa-stat-num">0</div><div class="fa-stat-label">typing needed, all taps</div></div>
+    </div>
+
+    <section class="fa-section">
+        <h2>Totals</h2>
+        <div class="fa-grid">
             {% for key, (question, options) in labels.items() %}
-            <div class="col-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                    <h5 class="card-title">{{ question }}</h5>
-                    <table class="table table-sm">
-                        {% for option, text in options.items() %}
-                        <tr><td>{{ text }}</td><td class="text-end">{{ summary.counts[key][option] }}</td></tr>
-                        {% endfor %}
-                    </table>
-                    </div>
-                </div>
+            <div class="fa-tile">
+                <h3>{{ question }}</h3>
+                <table class="table table-sm" style="margin-top:0.5rem">
+                    {% for option, text in options.items() %}
+                    <tr><td>{{ text }}</td><td class="text-end"><strong>{{ summary.counts[key][option] }}</strong></td></tr>
+                    {% endfor %}
+                </table>
             </div>
             {% endfor %}
         </div>
+    </section>
 
-        {% if responses is not none %}
-        <h2 class="text-white"><strong>Each Member's Answers</strong></h2>
-        <p class="text-light">Admins only. Answering "yes" to volunteering does not change anyone's role.</p>
-        <div class="table-responsive">
-            <table class="table table-dark table-striped">
+    {% if responses is not none %}
+    <section class="fa-section">
+        <h2>Each member's answers</h2>
+        <p style="color:var(--ink-2)">Admins only. Answering "yes" to volunteering does not change anyone's role.</p>
+        <div class="fa-panel">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -40,7 +48,7 @@
                 <tbody>
                     {% for r in responses %}
                     <tr>
-                        <td>{{ r.name }} ({{ r.uid }})</td>
+                        <td>{{ r.name }} <span style="color:var(--ink-3)">({{ r.uid }})</span></td>
                         <td>{{ 'Active' if r.active else 'Waiting for approval' }}</td>
                         {% for key, (question, options) in labels.items() %}
                         {% set value = r.answers.get(key) %}
@@ -59,6 +67,7 @@
                 </tbody>
             </table>
         </div>
-        {% endif %}
-    </div>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}
