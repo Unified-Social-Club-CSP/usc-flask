@@ -1,7 +1,7 @@
-""" Multiplayer Bingo rooms for the Friends of Poway Seniors website.
+""" Multiplayer Bingo rooms for the Unified Social Club website.
 
-The rules engine here is a line-for-line port of fops-pages
-assets/js/fops/bingo/engine.js. Both sides use the same seeded generator
+The rules engine here is a line-for-line port of usc-pages
+assets/js/usc/bingo/engine.js. Both sides use the same seeded generator
 (mulberry32), so for a given seed they produce the same cards and the same
 calling order. A room only stores its seed and start time; every player's
 browser works out the calls from those, and the server checks BINGO claims
@@ -94,7 +94,7 @@ def now_ms():
 # ---------- Database models ----------
 
 class BingoRoom(db.Model):
-    __tablename__ = 'fops_bingo_rooms'
+    __tablename__ = 'usc_bingo_rooms'
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(8), unique=True, nullable=False)
@@ -144,11 +144,11 @@ class BingoRoom(db.Model):
 
 
 class BingoPlayer(db.Model):
-    __tablename__ = 'fops_bingo_players'
-    __table_args__ = (db.UniqueConstraint('room_id', 'user_id', name='uq_fops_bingo_room_user'),)
+    __tablename__ = 'usc_bingo_players'
+    __table_args__ = (db.UniqueConstraint('room_id', 'user_id', name='uq_usc_bingo_room_user'),)
 
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.Integer, db.ForeignKey('fops_bingo_rooms.id'), nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey('usc_bingo_rooms.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     card_seed = db.Column(db.BigInteger, nullable=False)

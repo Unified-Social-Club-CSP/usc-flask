@@ -177,7 +177,7 @@ class UserAPI:
             if uid is None or len(uid) < 2:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 400
 
-            # Friends of Poway Seniors users are community members, not GitHub users,
+            # Unified Social Club users are community members, not GitHub users,
             # so any unused username is accepted.
             if User.query.filter_by(_uid=uid).first():
                 return {'message': f'The username {uid} is already taken. Please choose another.'}, 409

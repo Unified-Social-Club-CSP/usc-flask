@@ -1,9 +1,9 @@
-""" API for the interest survey on the Friends of Poway Seniors profile page.
+""" API for the interest survey on the Unified Social Club profile page.
 
-GET /api/fops/profile/me                  who is signed in: id, uid, name, role, active
-GET /api/fops/profile/interests           the signed-in member's answers
-PUT /api/fops/profile/interests           save them, body: {"answers": {...}}
-GET /api/fops/profile/interests/summary   totals across members (Admin or Volunteer, no names)
+GET /api/usc/profile/me                  who is signed in: id, uid, name, role, active
+GET /api/usc/profile/interests           the signed-in member's answers
+PUT /api/usc/profile/interests           save them, body: {"answers": {...}}
+GET /api/usc/profile/interests/summary   totals across members (Admin or Volunteer, no names)
 
 A new account waits for verification, but the member can still fill in the survey right
 after signup, so the first three allow pending accounts. They only ever touch the
@@ -14,10 +14,10 @@ from flask_restful import Api, Resource
 from sqlalchemy.exc import SQLAlchemyError
 
 from api.authorize import token_required
-from model.fops_interests import InterestSurvey, QUESTIONS, SUMMARY_ROLES, clean_answers
+from model.usc_interests import InterestSurvey, QUESTIONS, SUMMARY_ROLES, clean_answers
 
-fops_interests_api = Blueprint('fops_interests_api', __name__, url_prefix='/api/fops/profile')
-api = Api(fops_interests_api)
+usc_interests_api = Blueprint('usc_interests_api', __name__, url_prefix='/api/usc/profile')
+api = Api(usc_interests_api)
 
 
 class _Me(Resource):

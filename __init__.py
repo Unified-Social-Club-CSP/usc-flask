@@ -15,7 +15,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Configure Flask Port, default to 8587 which is same as Docker setup
-app.config['FLASK_PORT'] = int(os.environ.get('FLASK_PORT') or 8587)
+app.config['FLASK_PORT'] = int(os.environ.get('FLASK_PORT') or 8588)
 
 # Configure Code Runner port, default 8591
 app.config['RUNNER_PORT'] = int(os.environ.get('RUNNER_PORT') or 8591)
@@ -40,7 +40,7 @@ allowed_origins = [
     'http://localhost:4000',
     'http://127.0.0.1:4000',
     'https://open-coding-society.github.io',
-    'https://rex0dex.github.io',  # fops-pages frontend
+    'https://rex0dex.github.io',  # usc-pages frontend
     # Regex pattern to match any subdomain of opencodingsociety.com
     r'https://.*\.opencodingsociety\.com',
     'https://opencodingsociety.com',

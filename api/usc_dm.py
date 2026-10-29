@@ -8,7 +8,7 @@ POST /api/dm/conversations/<id>/read            mark the chat read
 GET  /api/dm/unread                             {count, people, conversations} for the navbar bell
 GET  /api/people/search?query=                  people you are allowed to message
 
-Approved accounts only. Members can only start chats with staff (model/fops_dm.py),
+Approved accounts only. Members can only start chats with staff (model/usc_dm.py),
 and every chat route checks the signed-in user is in that chat.
 """
 from datetime import datetime
@@ -21,11 +21,11 @@ from sqlalchemy.exc import SQLAlchemyError
 from __init__ import db
 from api.authorize import token_required
 from model.user import User
-from model.fops_dm import (DMConversation, DMMessage, STAFF_ROLES, MAX_PARTICIPANTS, MAX_BODY,
+from model.usc_dm import (DMConversation, DMMessage, STAFF_ROLES, MAX_PARTICIPANTS, MAX_BODY,
                            is_staff, person)
 
-fops_dm_api = Blueprint('fops_dm_api', __name__, url_prefix='/api')
-api = Api(fops_dm_api)
+usc_dm_api = Blueprint('usc_dm_api', __name__, url_prefix='/api')
+api = Api(usc_dm_api)
 
 
 def my_conversation(conversation_id):

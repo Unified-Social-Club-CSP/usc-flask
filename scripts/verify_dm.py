@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the direct-messages API (api/fops_dm.py) through the real request stack.
+"""Verify the direct-messages API (api/usc_dm.py) through the real request stack.
 
 Creates three throwaway accounts (a member, a second member, a volunteer), runs the
 checks below, then deletes those accounts and their chats again.
@@ -18,7 +18,7 @@ sys.path.insert(0, REPO)
 from main import app  # noqa: E402
 from __init__ import db  # noqa: E402
 from model.user import User  # noqa: E402
-from model.fops_dm import DMConversation, DMMessage, DMParticipant  # noqa: E402
+from model.usc_dm import DMConversation, DMMessage, DMParticipant  # noqa: E402
 
 PASSWORD = secrets.token_urlsafe(12)
 _results = []

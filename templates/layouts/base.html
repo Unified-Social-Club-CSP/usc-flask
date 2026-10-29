@@ -1,12 +1,12 @@
 <!-- Layout for every backend page.
 Bootstrap and DataTables stay loaded because the admin tables use them;
-static/css/fops-admin.css gives them the same look as the Friends of Poway Seniors website.
+static/css/usc-admin.css gives them the same look as the Unified Social Club website.
 -->
 <!DOCTYPE HTML>
 <html lang="en">
 
-{% set basename = "Friends of Poway Seniors" %}
-{% set frontend = "https://rex0dex.github.io/fops-pages/" %}
+{% set basename = "Unified Social Club" %}
+{% set frontend = "https://rex0dex.github.io/usc-pages/" %}
 
 <head>
     <meta charset="utf-8">
@@ -28,7 +28,7 @@ static/css/fops-admin.css gives them the same look as the Friends of Poway Senio
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/fops-admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/usc-admin.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
 
     {% block head %}
@@ -50,7 +50,7 @@ static/css/fops-admin.css gives them the same look as the Friends of Poway Senio
 
     <footer class="fa-footer">
         <div class="fa-wrap">
-            <span class="fa-footer-brand">Friends of Poway Seniors</span>
+            <span class="fa-footer-brand">Unified Social Club</span>
             <span>Backend for the website · Team Triple T</span>
         </div>
     </footer>

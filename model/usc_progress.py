@@ -1,8 +1,7 @@
-""" Saved game progress for the Friends of Poway Seniors website.
+""" Saved game progress for the Unified Social Club website.
 
 One row per (user, game). The data column holds the game's own JSON, such as
-the Spot the Scam practice schedule or Bingo and movement-game records, so a
-signed-in player picks up where they left off on any computer.
+Bingo records, so a signed-in player picks up where they left off on any computer.
 """
 import json
 from datetime import datetime
@@ -10,13 +9,13 @@ from datetime import datetime
 from __init__ import db
 
 # Games the website is allowed to save. Anything else is rejected.
-FOPS_GAMES = ('scam-trainer', 'bingo', 'movement', 'geography')
+USC_GAMES = ('bingo',)
 MAX_DATA_BYTES = 20_000
 
 
 class GameProgress(db.Model):
-    __tablename__ = 'fops_game_progress'
-    __table_args__ = (db.UniqueConstraint('_user_id', '_game', name='uq_fops_user_game'),)
+    __tablename__ = 'usc_game_progress'
+    __table_args__ = (db.UniqueConstraint('_user_id', '_game', name='uq_usc_user_game'),)
 
     id = db.Column(db.Integer, primary_key=True)
     _user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

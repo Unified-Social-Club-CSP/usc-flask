@@ -14,14 +14,14 @@ from model.persona import Persona, initPersonas, initPersonaUsers
 from model.presence_schedule import seed_schedules
 # API endpoints
 from api.user import user_api 
-from api.fops_progress import fops_progress_api
-from model.fops_progress import initGameProgress
-from api.fops_bingo import fops_bingo_api
-from model.fops_bingo import initBingoRooms
-from api.fops_interests import fops_interests_api
-from api.fops_dm import fops_dm_api
-from model.fops_dm import initDirectMessages
-from model.fops_interests import InterestSurvey, LABELS, SUMMARY_ROLES, RESPONSE_ROLES, initInterestSurveys
+from api.usc_progress import usc_progress_api
+from model.usc_progress import initGameProgress
+from api.usc_bingo import usc_bingo_api
+from model.usc_bingo import initBingoRooms
+from api.usc_interests import usc_interests_api
+from api.usc_dm import usc_dm_api
+from model.usc_dm import initDirectMessages
+from model.usc_interests import InterestSurvey, LABELS, SUMMARY_ROLES, RESPONSE_ROLES, initInterestSurveys
 from api.python_exec_api import python_exec_api
 from api.javascript_exec_api import javascript_exec_api
 from api.section import section_api
@@ -87,12 +87,12 @@ app.register_blueprint(persona_api)
 app.register_blueprint(skill_passport_api)
 app.register_blueprint(pfp_api) 
 app.register_blueprint(groq_api)
-app.register_blueprint(fops_progress_api)
-app.register_blueprint(fops_bingo_api)
-app.register_blueprint(fops_interests_api)
-app.register_blueprint(fops_dm_api)
+app.register_blueprint(usc_progress_api)
+app.register_blueprint(usc_bingo_api)
+app.register_blueprint(usc_interests_api)
+app.register_blueprint(usc_dm_api)
 
-# Friends of Poway Seniors: make sure our tables exist
+# Unified Social Club: make sure our tables exist
 with app.app_context():
     initGameProgress()
     initBingoRooms()
@@ -231,14 +231,14 @@ def persona():
     personas = Persona.query.all()
     return render_template("persona.html", personas=personas)
 
-@app.route('/fops/interests/')
+@app.route('/usc/interests/')
 @login_required
-def fops_interests():
+def usc_interests():
     # Totals for active Admins and Volunteers; named answers for active Admins only.
     if not current_user.active or current_user.role not in SUMMARY_ROLES:
         abort(403)
     responses = InterestSurvey.responses() if current_user.role in RESPONSE_ROLES else None
-    return render_template("fops_interests.html", summary=InterestSurvey.summary(),
+    return render_template("usc_interests.html", summary=InterestSurvey.summary(),
                            labels=LABELS, responses=responses)
 
 # Helper function to extract uploads for a user (ie PFP image)

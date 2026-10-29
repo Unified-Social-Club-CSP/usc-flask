@@ -1,11 +1,11 @@
-""" Direct messages between Friends of Poway Seniors members and the volunteers who help them.
+""" Direct messages between Unified Social Club members and the volunteers who help them.
 
 Same shape as the Open Coding Society DM system (Open-Coding-Society/spring /api/dm), so
 OCS's DM chat and navbar bell work against this backend.
 
-Safety rule for a seniors' site: a regular member can only start a chat with staff
+Safety rule for a club of adults with special needs: a regular member can only start a chat with staff
 (Admin, Teacher, or Volunteer), never with another member, so strangers can't
-message seniors privately. Staff can message anyone.
+message members privately. Staff can message anyone.
 """
 from datetime import datetime
 
@@ -27,7 +27,7 @@ def person(user):
 
 
 class DMConversation(db.Model):
-    __tablename__ = 'fops_dm_conversations'
+    __tablename__ = 'usc_dm_conversations'
 
     id = db.Column(db.Integer, primary_key=True)
     _created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -87,10 +87,10 @@ class DMConversation(db.Model):
 
 
 class DMParticipant(db.Model):
-    __tablename__ = 'fops_dm_participants'
+    __tablename__ = 'usc_dm_participants'
 
     id = db.Column(db.Integer, primary_key=True)
-    _conversation_id = db.Column(db.Integer, db.ForeignKey('fops_dm_conversations.id'), nullable=False)
+    _conversation_id = db.Column(db.Integer, db.ForeignKey('usc_dm_conversations.id'), nullable=False)
     _user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     _last_read_at = db.Column(db.DateTime, nullable=True)
 
@@ -98,10 +98,10 @@ class DMParticipant(db.Model):
 
 
 class DMMessage(db.Model):
-    __tablename__ = 'fops_dm_messages'
+    __tablename__ = 'usc_dm_messages'
 
     id = db.Column(db.Integer, primary_key=True)
-    _conversation_id = db.Column(db.Integer, db.ForeignKey('fops_dm_conversations.id'), nullable=False)
+    _conversation_id = db.Column(db.Integer, db.ForeignKey('usc_dm_conversations.id'), nullable=False)
     _sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     _body = db.Column(db.Text, nullable=False)
     _sent_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

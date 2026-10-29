@@ -1,4 +1,4 @@
-""" Interest survey answers for the Friends of Poway Seniors profile page.
+""" Interest survey answers for the Unified Social Club profile page.
 
 One row per member. The answers personalize the website (which games and events
 show first) and, added up across members, help volunteers plan events.
@@ -14,34 +14,31 @@ from model.user import User
 # Every question the survey can ask, and the answers it accepts.
 # "many" questions take a list of answers; the others take one.
 QUESTIONS = {
-    'goals': {'many': True, 'options': ['games', 'scams', 'exercise', 'events', 'tech-help']},
+    'activities': {'many': True, 'options': ['games', 'art', 'karaoke', 'sports', 'events']},
+    'online': {'many': True, 'options': ['dates', 'bingo', 'messages']},
     'comfort': {'many': False, 'options': ['starting', 'okay', 'comfortable']},
-    'scam_contact': {'many': False, 'options': ['yes', 'not-sure', 'no']},
-    'events': {'many': True, 'options': ['bingo', 'tech-help', 'lunches', 'exercise', 'trips']},
+    'helper': {'many': False, 'options': ['self', 'family', 'aide']},
     'reminders': {'many': False, 'options': ['email', 'phone', 'none']},
-    'volunteer': {'many': False, 'options': ['yes', 'maybe', 'no']},
+    'role': {'many': False, 'options': ['member', 'family', 'volunteer']},
 }
 
-# Plain-word text for the results page, matching the wording on the profile page.
+# Question and answer wording for the staff results page (same as the website).
 LABELS = {
-    'goals': ('What would you like to do here?', {
-        'games': 'Play games', 'scams': 'Stay safe from scams', 'exercise': 'Exercise',
-        'events': 'Come to events', 'tech-help': 'Get tech help'}),
-    'comfort': ('How comfortable are you with phones and computers?', {
-        'starting': 'Just starting', 'okay': 'Okay', 'comfortable': 'Very comfortable'}),
-    'scam_contact': ('Have you gotten a scam message or call this year?', {
-        'yes': 'Yes', 'not-sure': 'Not sure', 'no': 'No'}),
-    'events': ('Which events interest you?', {
-        'bingo': 'Bingo', 'tech-help': 'Tech help', 'lunches': 'Lunches',
-        'exercise': 'Exercise classes', 'trips': 'Trips'}),
-    'reminders': ('How do you prefer to be reminded?', {
+    'activities': ('What do you like to do at club?', {
+        'games': 'Board and card games', 'art': 'Arts and crafts', 'karaoke': 'Karaoke',
+        'sports': 'Sports', 'events': 'Special events, like magic shows'}),
+    'online': ('What would you like to do on this website?', {
+        'dates': 'See club dates', 'bingo': 'Play Bingo', 'messages': 'Talk to a volunteer'}),
+    'comfort': ('How easy is it for you to use a phone or computer?', {
+        'starting': 'It is hard for me', 'okay': 'It is okay', 'comfortable': 'It is easy'}),
+    'helper': ('Who helps you use this website?', {
+        'self': 'I use it by myself', 'family': 'A family member', 'aide': 'An aide or staff member'}),
+    'reminders': ('How should we remind you about club dates?', {
         'email': 'Email', 'phone': 'Phone call', 'none': 'No reminders'}),
-    'volunteer': ('Would you like to volunteer?', {
-        'yes': 'Yes', 'maybe': 'Maybe later', 'no': 'No'}),
+    'role': ('Who are you?', {
+        'member': 'I am a club member', 'family': 'I am family or an aide', 'volunteer': 'I want to volunteer'}),
 }
 
-# Who may see survey results. Totals have no names; individual answers do.
-# Answering "yes" to the volunteer question never changes anyone's role.
 SUMMARY_ROLES = ['Admin', 'Volunteer']
 RESPONSE_ROLES = ['Admin']
 
@@ -68,7 +65,7 @@ def clean_answers(raw):
 
 
 class InterestSurvey(db.Model):
-    __tablename__ = 'fops_interest_surveys'
+    __tablename__ = 'usc_interest_surveys'
 
     id = db.Column(db.Integer, primary_key=True)
     _user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)

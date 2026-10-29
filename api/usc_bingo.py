@@ -1,10 +1,10 @@
-""" Multiplayer Bingo API for the Friends of Poway Seniors website.
+""" Multiplayer Bingo API for the Unified Social Club website.
 
-POST /api/fops/bingo/rooms               create a room, body: {"interval_seconds": 8}
-POST /api/fops/bingo/rooms/<code>/join   join a room with its 4-digit code
-GET  /api/fops/bingo/rooms/<code>        room state (players, start time, winner)
-POST /api/fops/bingo/rooms/<code>/start  host starts the caller
-POST /api/fops/bingo/rooms/<code>/claim  claim BINGO; the server checks it
+POST /api/usc/bingo/rooms               create a room, body: {"interval_seconds": 8}
+POST /api/usc/bingo/rooms/<code>/join   join a room with its 4-digit code
+GET  /api/usc/bingo/rooms/<code>        room state (players, start time, winner)
+POST /api/usc/bingo/rooms/<code>/start  host starts the caller
+POST /api/usc/bingo/rooms/<code>/claim  claim BINGO; the server checks it
 
 The server never sends a list of called balls. Browsers compute the calls from
 the room seed and start time, and the server uses the same math to check claims.
@@ -16,13 +16,13 @@ from flask_restful import Api, Resource
 
 from __init__ import db
 from api.authorize import token_required
-from model.fops_bingo import (
+from model.usc_bingo import (
     BingoRoom, BingoPlayer, START_DELAY_MS,
     balls_called_at, call_order, card_seed_for, make_card, now_ms, winning_lines,
 )
 
-fops_bingo_api = Blueprint('fops_bingo_api', __name__, url_prefix='/api/fops/bingo')
-api = Api(fops_bingo_api)
+usc_bingo_api = Blueprint('usc_bingo_api', __name__, url_prefix='/api/usc/bingo')
+api = Api(usc_bingo_api)
 
 INTERVALS = {6, 8, 10, 12}  # seconds between calls the host can choose
 

@@ -6,7 +6,7 @@
     <section class="fa-hero">
         <span class="fa-status">Server running on port {{ config['FLASK_PORT'] }}</span>
         <h1>The server behind <em>the site</em></h1>
-        <p>Accounts, sign-in, saved game progress, Bingo rooms, and the interest survey for the Friends of Poway Seniors website.</p>
+        <p>Accounts, sign-in, saved game progress, Bingo rooms, and the interest survey for the Unified Social Club website.</p>
     </section>
 
     {% if current_user.is_authenticated %}
@@ -24,7 +24,7 @@
             <a class="fa-tile" href="{{ url_for('sections') }}"><h3>Sections</h3><p>Groups that accounts belong to.</p><span class="fa-go">Open →</span></a>
             <a class="fa-tile" href="{{ url_for('persona') }}"><h3>Personas</h3><p>Profile types used to group users.</p><span class="fa-go">Open →</span></a>
             {% if current_user.active and current_user.role in ['Admin', 'Volunteer'] %}
-            <a class="fa-tile" href="{{ url_for('fops_interests') }}"><h3>Interest Survey</h3><p>What members told us on their profile, for planning events.</p><span class="fa-go">Open →</span></a>
+            <a class="fa-tile" href="{{ url_for('usc_interests') }}"><h3>Interest Survey</h3><p>What members told us on their profile, for planning events.</p><span class="fa-go">Open →</span></a>
             {% endif %}
         </div>
     </section>
@@ -49,11 +49,11 @@
                     <tr><td><span class="fa-method">POST</span><code>/api/authenticate</code></td><td>Sign in</td></tr>
                     <tr><td><span class="fa-method">DELETE</span><code>/api/authenticate</code></td><td>Sign out (also for new accounts waiting for approval)</td></tr>
                     <tr><td><span class="fa-method">GET</span><code>/api/id</code></td><td>Who is signed in</td></tr>
-                    <tr><td><span class="fa-method">GET · PUT</span><code>/api/fops/progress/&lt;game&gt;</code></td><td>Saved game progress for each member, like Spot the Scam weak spots</td></tr>
-                    <tr><td><span class="fa-method">POST</span><code>/api/fops/bingo/rooms</code></td><td>Start a Bingo game with friends; join, start, and claim with the room code</td></tr>
-                    <tr><td><span class="fa-method">GET</span><code>/api/fops/profile/me</code></td><td>Who is signed in, even while waiting for approval</td></tr>
-                    <tr><td><span class="fa-method">GET · PUT</span><code>/api/fops/profile/interests</code></td><td>A member's interest survey (works right after signup)</td></tr>
-                    <tr><td><span class="fa-method">GET</span><code>/api/fops/profile/interests/summary</code></td><td>Survey totals for planning events (Admin or Volunteer, no names)</td></tr>
+                    <tr><td><span class="fa-method">GET · PUT</span><code>/api/usc/progress/&lt;game&gt;</code></td><td>Saved game progress for each member, like Spot the Scam weak spots</td></tr>
+                    <tr><td><span class="fa-method">POST</span><code>/api/usc/bingo/rooms</code></td><td>Start a Bingo game with friends; join, start, and claim with the room code</td></tr>
+                    <tr><td><span class="fa-method">GET</span><code>/api/usc/profile/me</code></td><td>Who is signed in, even while waiting for approval</td></tr>
+                    <tr><td><span class="fa-method">GET · PUT</span><code>/api/usc/profile/interests</code></td><td>A member's interest survey (works right after signup)</td></tr>
+                    <tr><td><span class="fa-method">GET</span><code>/api/usc/profile/interests/summary</code></td><td>Survey totals for planning events (Admin or Volunteer, no names)</td></tr>
                 </tbody>
             </table>
         </div>

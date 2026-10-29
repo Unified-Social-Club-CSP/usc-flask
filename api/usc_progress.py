@@ -1,8 +1,8 @@
-""" API for saved game progress on the Friends of Poway Seniors website.
+""" API for saved game progress on the Unified Social Club website.
 
-GET /api/fops/progress/<game>   the signed-in player's saved progress
-PUT /api/fops/progress/<game>   save it, body: {"data": {...}}
-GET /api/fops/progress          all of the signed-in player's games
+GET /api/usc/progress/<game>   the signed-in player's saved progress
+PUT /api/usc/progress/<game>   save it, body: {"data": {...}}
+GET /api/usc/progress          all of the signed-in player's games
 """
 import json
 
@@ -10,16 +10,16 @@ from flask import Blueprint, request, g
 from flask_restful import Api, Resource
 
 from api.authorize import token_required
-from model.fops_progress import GameProgress, FOPS_GAMES, MAX_DATA_BYTES
+from model.usc_progress import GameProgress, USC_GAMES, MAX_DATA_BYTES
 
-fops_progress_api = Blueprint('fops_progress_api', __name__, url_prefix='/api/fops')
-api = Api(fops_progress_api)
+usc_progress_api = Blueprint('usc_progress_api', __name__, url_prefix='/api/usc')
+api = Api(usc_progress_api)
 
 
 class _GameProgress(Resource):
     @token_required()
     def get(self, game):
-        if game not in FOPS_GAMES:
+        if game not in USC_GAMES:
             return {'message': f'Unknown game: {game}'}, 404
         row = GameProgress.find(g.current_user.id, game)
         if row is None:
@@ -28,7 +28,7 @@ class _GameProgress(Resource):
 
     @token_required()
     def put(self, game):
-        if game not in FOPS_GAMES:
+        if game not in USC_GAMES:
             return {'message': f'Unknown game: {game}'}, 404
         body = request.get_json(silent=True) or {}
         data = body.get('data')
