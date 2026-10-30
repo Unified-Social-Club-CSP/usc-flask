@@ -1,7 +1,8 @@
 """ Saved game progress for the Unified Social Club website.
 
 One row per (user, game). The data column holds the game's own JSON, such as
-Bingo records, so a signed-in player picks up where they left off on any computer.
+Bingo, Jeopardy, or Trivia records, so a signed-in player picks up where they
+left off on any computer.
 """
 import json
 from datetime import datetime
@@ -9,7 +10,7 @@ from datetime import datetime
 from __init__ import db
 
 # Games the website is allowed to save. Anything else is rejected.
-USC_GAMES = ('bingo',)
+USC_GAMES = ('bingo', 'jeopardy', 'trivia')
 MAX_DATA_BYTES = 20_000
 
 
