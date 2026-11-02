@@ -21,6 +21,8 @@ from model.usc_bingo import initBingoRooms
 from api.usc_interests import usc_interests_api
 from api.usc_dm import usc_dm_api
 from model.usc_dm import initDirectMessages
+from api.usc_jeopardy import usc_jeopardy_api
+from model.usc_jeopardy import initJeopardy
 from model.usc_interests import InterestSurvey, LABELS, SUMMARY_ROLES, RESPONSE_ROLES, initInterestSurveys
 from api.python_exec_api import python_exec_api
 from api.javascript_exec_api import javascript_exec_api
@@ -91,6 +93,7 @@ app.register_blueprint(usc_progress_api)
 app.register_blueprint(usc_bingo_api)
 app.register_blueprint(usc_interests_api)
 app.register_blueprint(usc_dm_api)
+app.register_blueprint(usc_jeopardy_api)
 
 # Unified Social Club: make sure our tables exist
 with app.app_context():
@@ -98,6 +101,7 @@ with app.app_context():
     initBingoRooms()
     initInterestSurveys()
     initDirectMessages()
+    initJeopardy()
 app.register_blueprint(gemini_api)
 app.register_blueprint(ainpc_api)
 app.register_blueprint(microblog_api)

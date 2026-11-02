@@ -1,0 +1,384 @@
+{
+  "name": "Club Life",
+  "level": "easy",
+  "categories": [
+    {
+      "name": "Games",
+      "icon": "🎲",
+      "clues": [
+        {
+          "value": 100,
+          "clue": "In Bingo, what do you shout when you win?",
+          "choices": [
+            {
+              "emoji": "🍕",
+              "label": "Pizza!"
+            },
+            {
+              "emoji": "🎉",
+              "label": "BINGO!"
+            },
+            {
+              "emoji": "👋",
+              "label": "Goodbye!"
+            }
+          ],
+          "answer": 1
+        },
+        {
+          "value": 200,
+          "clue": "A dice is shaped like a box. How many sides does it have?",
+          "choices": [
+            {
+              "emoji": "🎲",
+              "label": "6"
+            },
+            {
+              "emoji": "✌️",
+              "label": "2"
+            },
+            {
+              "emoji": "🔟",
+              "label": "10"
+            }
+          ],
+          "answer": 0
+        },
+        {
+          "value": 300,
+          "clue": "Which color is in a deck of Uno cards?",
+          "choices": [
+            {
+              "emoji": "🟪",
+              "label": "Purple"
+            },
+            {
+              "emoji": "🟫",
+              "label": "Brown"
+            },
+            {
+              "emoji": "🟥",
+              "label": "Red"
+            }
+          ],
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "name": "Music & Karaoke",
+      "icon": "🎤",
+      "clues": [
+        {
+          "value": 100,
+          "clue": "What do you hold in your hand to sing karaoke?",
+          "choices": [
+            {
+              "emoji": "🎤",
+              "label": "A microphone"
+            },
+            {
+              "emoji": "🥄",
+              "label": "A spoon"
+            },
+            {
+              "emoji": "🔨",
+              "label": "A hammer"
+            }
+          ],
+          "answer": 0
+        },
+        {
+          "value": 200,
+          "clue": "At karaoke, what do you read on the big screen?",
+          "choices": [
+            {
+              "emoji": "🗺️",
+              "label": "A map"
+            },
+            {
+              "emoji": "📝",
+              "label": "The words to the song"
+            },
+            {
+              "emoji": "⛅",
+              "label": "The weather"
+            }
+          ],
+          "answer": 1
+        },
+        {
+          "value": 300,
+          "clue": "Which instrument has black and white keys?",
+          "choices": [
+            {
+              "emoji": "🥁",
+              "label": "Drum"
+            },
+            {
+              "emoji": "🎸",
+              "label": "Guitar"
+            },
+            {
+              "emoji": "🎹",
+              "label": "Piano"
+            }
+          ],
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "name": "Sports",
+      "icon": "🏀",
+      "clues": [
+        {
+          "value": 100,
+          "clue": "In basketball, where do you throw the ball to score?",
+          "choices": [
+            {
+              "emoji": "⛺",
+              "label": "In a tent"
+            },
+            {
+              "emoji": "🏀",
+              "label": "In the hoop"
+            },
+            {
+              "emoji": "🏊",
+              "label": "In a pool"
+            }
+          ],
+          "answer": 1
+        },
+        {
+          "value": 200,
+          "clue": "In baseball, you run around the bases and come back to which base?",
+          "choices": [
+            {
+              "emoji": "🏠",
+              "label": "Home plate"
+            },
+            {
+              "emoji": "🌊",
+              "label": "The ocean"
+            },
+            {
+              "emoji": "🍳",
+              "label": "The kitchen"
+            }
+          ],
+          "answer": 0
+        },
+        {
+          "value": 300,
+          "clue": "At the Special Olympics, what do the top athletes win?",
+          "choices": [
+            {
+              "emoji": "🚗",
+              "label": "A car"
+            },
+            {
+              "emoji": "🥪",
+              "label": "A sandwich"
+            },
+            {
+              "emoji": "🏅",
+              "label": "A medal"
+            }
+          ],
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "name": "Arts & Crafts",
+      "icon": "🎨",
+      "clues": [
+        {
+          "value": 100,
+          "clue": "What do you use to cut paper?",
+          "choices": [
+            {
+              "emoji": "✂️",
+              "label": "Scissors"
+            },
+            {
+              "emoji": "🧦",
+              "label": "A sock"
+            },
+            {
+              "emoji": "🥄",
+              "label": "A spoon"
+            }
+          ],
+          "answer": 0
+        },
+        {
+          "value": 200,
+          "clue": "Mix blue paint and yellow paint. What color do you get?",
+          "choices": [
+            {
+              "emoji": "🔴",
+              "label": "Red"
+            },
+            {
+              "emoji": "🟢",
+              "label": "Green"
+            },
+            {
+              "emoji": "⚫",
+              "label": "Black"
+            }
+          ],
+          "answer": 1
+        },
+        {
+          "value": 300,
+          "clue": "Mix red paint and white paint. What color do you get?",
+          "choices": [
+            {
+              "emoji": "🔵",
+              "label": "Blue"
+            },
+            {
+              "emoji": "🟢",
+              "label": "Green"
+            },
+            {
+              "emoji": "🌸",
+              "label": "Pink"
+            }
+          ],
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "name": "Poway",
+      "icon": "🏡",
+      "clues": [
+        {
+          "value": 100,
+          "clue": "Unified Social Club meets in which city?",
+          "choices": [
+            {
+              "emoji": "🗽",
+              "label": "New York"
+            },
+            {
+              "emoji": "🏡",
+              "label": "Poway"
+            },
+            {
+              "emoji": "🗼",
+              "label": "Paris"
+            }
+          ],
+          "answer": 1
+        },
+        {
+          "value": 200,
+          "clue": "Poway has a big lake where people fish and walk. What is it called?",
+          "choices": [
+            {
+              "emoji": "🎣",
+              "label": "Lake Poway"
+            },
+            {
+              "emoji": "🧂",
+              "label": "Salt Lake"
+            },
+            {
+              "emoji": "🧊",
+              "label": "Ice Lake"
+            }
+          ],
+          "answer": 0
+        },
+        {
+          "value": 300,
+          "clue": "Poway is called \"The City in the...\" what?",
+          "choices": [
+            {
+              "emoji": "☁️",
+              "label": "Clouds"
+            },
+            {
+              "emoji": "🌊",
+              "label": "Ocean"
+            },
+            {
+              "emoji": "🐴",
+              "label": "Country"
+            }
+          ],
+          "answer": 2
+        }
+      ]
+    },
+    {
+      "name": "Holidays",
+      "icon": "🎃",
+      "clues": [
+        {
+          "value": 100,
+          "clue": "On which holiday do people carve pumpkins?",
+          "choices": [
+            {
+              "emoji": "🎃",
+              "label": "Halloween"
+            },
+            {
+              "emoji": "💝",
+              "label": "Valentine's Day"
+            },
+            {
+              "emoji": "🎆",
+              "label": "Fourth of July"
+            }
+          ],
+          "answer": 0
+        },
+        {
+          "value": 200,
+          "clue": "Many people eat a big turkey dinner on which holiday?",
+          "choices": [
+            {
+              "emoji": "🐰",
+              "label": "Easter"
+            },
+            {
+              "emoji": "🦃",
+              "label": "Thanksgiving"
+            },
+            {
+              "emoji": "🎃",
+              "label": "Halloween"
+            }
+          ],
+          "answer": 1
+        },
+        {
+          "value": 300,
+          "clue": "Which holiday is the birthday of the United States, with fireworks?",
+          "choices": [
+            {
+              "emoji": "🦃",
+              "label": "Thanksgiving"
+            },
+            {
+              "emoji": "🎄",
+              "label": "Christmas"
+            },
+            {
+              "emoji": "🎆",
+              "label": "Fourth of July"
+            }
+          ],
+          "answer": 2
+        }
+      ]
+    }
+  ]
+}

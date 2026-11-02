@@ -24,6 +24,19 @@ the local database stays unchanged. No new migration is required for this featur
 the existing survey table is created at startup when absent. Older databases must
 still have upstream's `active` and `last_verified` user columns before use.
 
+## Club Jeopardy boards and results
+
+`GET /api/usc/jeopardy/boards` lists every board (without clues) and
+`GET /api/usc/jeopardy/boards/<id>` returns one with its categories and clues;
+both are open, so anyone can play. Active Admin, Teacher, or Volunteer accounts
+can `POST`, `PUT`, and `DELETE` boards; the last board can't be removed.
+`POST /api/usc/jeopardy/boards/<id>/results` saves a finished game as
+`{"teams": [{"name", "score"}]}` for any signed-in member, after checking the
+scores are possible on that board, and `GET` on the same path returns the 10
+newest games. The Club Life board (`model/usc_jeopardy_default.json`) is added at
+startup when there are no boards. Run `python scripts/verify_jeopardy.py` to check
+it all; the script removes the accounts, board, and games it makes.
+
 For the local frontend, run this service on port 8588 and usc-pages on port 4600,
 using the same hostname. GitHub Pages cannot execute Flask: deploy this service
 separately, then set the frontend's `usc_backend_url` to its HTTPS origin and
