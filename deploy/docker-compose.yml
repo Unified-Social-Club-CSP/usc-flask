@@ -1,0 +1,19 @@
+# Unified Social Club backend on the OCS server.
+# Run from this folder: docker compose up -d --build
+# Only the web app: the club site doesn't use the OCS socket or code runner
+# services, and their ports (8500) belong to the main OCS backend.
+services:
+  web:
+    image: usc_flask
+    container_name: usc_flask
+    build: ..
+    env_file:
+      - usc.env  # copy usc.env.example to usc.env on the server; never commit it
+    environment:
+      # Same Dockerfile as OCS Flask, on our own port so it doesn't clash with 8587.
+      GUNICORN_CMD_ARGS: "--workers=3 --threads=2 --bind=0.0.0.0:8588 --timeout=30 --access-logfile -"
+    ports:
+      - "8588:8588"
+    volumes:
+      - ../instance:/app/instance
+    restart: unless-stopped
